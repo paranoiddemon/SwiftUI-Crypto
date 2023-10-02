@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ADBDEC102ACAC31D00AA61E7 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBDEC0F2ACAC31D00AA61E7 /* HomeViewModel.swift */; };
 		ADC168802AC988E600285782 /* CoinRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC1687F2AC988E600285782 /* CoinRowView.swift */; };
 		ADC168822AC9893800285782 /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC168812AC9893800285782 /* PreviewProvider.swift */; };
 		ADC168842AC9AF7300285782 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC168832AC9AF7300285782 /* Double.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ADBDEC0F2ACAC31D00AA61E7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		ADC1687F2AC988E600285782 /* CoinRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinRowView.swift; sourceTree = "<group>"; };
 		ADC168812AC9893800285782 /* PreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProvider.swift; sourceTree = "<group>"; };
 		ADC168832AC9AF7300285782 /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
@@ -48,11 +50,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		ADBDEC042ACAB5AE00AA61E7 /* ViewModel */ = {
+		ADBDEC0C2ACAC30000AA61E7 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				ADBDEC0F2ACAC31D00AA61E7 /* HomeViewModel.swift */,
 			);
-			path = ViewModel;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		ADC58C922AC7D319003FD513 = {
@@ -115,7 +118,7 @@
 		ADF221D92AC7E15A0045E210 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				ADBDEC042ACAB5AE00AA61E7 /* ViewModel */,
+				ADBDEC0C2ACAC30000AA61E7 /* ViewModels */,
 				ADF221DA2AC7E1650045E210 /* Views */,
 			);
 			path = Home;
@@ -231,6 +234,7 @@
 				ADC58C9F2AC7D319003FD513 /* CryptoApp.swift in Sources */,
 				ADF221E12AC7E4870045E210 /* CircleButtonView.swift in Sources */,
 				ADF221E52AC845630045E210 /* CircleButtonAnimation.swift in Sources */,
+				ADBDEC102ACAC31D00AA61E7 /* HomeViewModel.swift in Sources */,
 				ADC58CAE2AC7D70D003FD513 /* Color.swift in Sources */,
 				ADC168822AC9893800285782 /* PreviewProvider.swift in Sources */,
 				ADC168842AC9AF7300285782 /* Double.swift in Sources */,
