@@ -9,12 +9,16 @@ import SwiftUI
 
 @main
 struct CryptoApp: App {
+    // 需要定义一个StateObject
+    @StateObject private var vm = HomeViewModel()
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 HomeView()
                     .navigationBarHidden(true)
             }
+            .environmentObject(vm)
         }
     }
 }

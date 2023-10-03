@@ -21,6 +21,8 @@ class DeveloperPreivew {
     
     static let instance = DeveloperPreivew()
     
+    let homeVM = HomeViewModel()
+    
     private init() {
     }
     
