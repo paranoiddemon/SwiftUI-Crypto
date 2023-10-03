@@ -24,6 +24,7 @@ struct HomeView: View {
             Color.theme.background.ignoresSafeArea()
             VStack {
                 homeHeader
+                SearchBarView(searchText: $vm.searchText) // 使用$来bind变量到子view
                 columnTitles
                 if !showPortfolio {
                     allCoinList

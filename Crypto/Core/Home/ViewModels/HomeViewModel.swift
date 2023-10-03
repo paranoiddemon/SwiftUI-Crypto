@@ -13,6 +13,8 @@ class HomeViewModel: ObservableObject {
     @Published var allCoins: [CoinModel] = []
     @Published var portfolioCoins: [CoinModel] = []
     
+    @Published var searchText: String = ""
+    
     private let dataService = CoinDataService()
     
     // https://swift.gg/2018/07/16/friday-qa-2015-07-17-when-to-use-swift-structs-and-classes/
