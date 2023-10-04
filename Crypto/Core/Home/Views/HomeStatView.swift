@@ -18,6 +18,7 @@ struct HomeStatView: View {
                 stat in
                 StatisticsView(stat: stat)
                     .frame(width: UIScreen.main.bounds.width / 3)
+                
             }
         }
         .frame(width: UIScreen.main.bounds.width, alignment: .leading)
@@ -27,4 +28,7 @@ struct HomeStatView: View {
 #Preview {
     HomeStatView(showPortfolio: .constant(false))
         .environmentObject(DeveloperPreivew.instance.homeVM)
+        .onAppear {
+            print(DeveloperPreivew.instance.homeVM.stats[3])
+        }
 }

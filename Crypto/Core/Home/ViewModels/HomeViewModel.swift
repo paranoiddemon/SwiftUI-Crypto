@@ -10,40 +10,19 @@ import Combine
 
 class HomeViewModel: ObservableObject {
     
-    static var stat1 = StatisticsModel(title:"Market Cap", value: "$12.25Bn", percentageChange: 25.24)
-    static var stat2 = StatisticsModel(title:"Total Volumn", value: "$1.23Tr")
-    static var stat3 = StatisticsModel(title:"Portfolio Value", value: "$50.4k", percentageChange: -15.31)
-    
     @Published var allCoins: [CoinModel] = []
     @Published var portfolioCoins: [CoinModel] = []
-    
     @Published var searchText: String = ""
-    
-    @Published var stats: [StatisticsModel] = [
-        StatisticsModel(title:"Market Cap", value: "$12.25Bn", percentageChange: 25.24),
-        StatisticsModel(title:"Total Volumn", value: "$1.23Tr"),
-        StatisticsModel(title:"Portfolio Value", value: "$50.4k", percentageChange: -15.31)
-    ]
+    @Published var stats: [StatisticsModel] = []
     
     private let coinDataService = CoinDataService()
     private let marketDataService = MarketDataService()
+    private let portfolioService = PortfolioDataService()
     
-    // https://swift.gg/2018/07/16/friday-qa-2015-07-17-when-to-use-swift-structs-and-classes/
     private var cancellables = Set<AnyCancellable>() // 初始化一个cancel的集合
-    // Set是struct ，AnyCancellable是class
-    // the collection cancellables must be declared with the var keyword to be mutable, allowing modifications to be made to it inside the method.
-    
-    
+
     
     init() {
-        //        DispatchQueue.main.asyncAfter(
-        //            deadline: .now() + 2.0 ,
-        //            execute: {
-        //                self.allCoins.append(DeveloperPreivew.instance.coin)
-        //                self.allCoins.append(DeveloperPreivew.instance.coin)
-        //                self.portfolioCoins.append(DeveloperPreivew.instance.coin)
-        //            }
-        //        )
         addSubscribers()
     }
     
@@ -54,6 +33,7 @@ class HomeViewModel: ObservableObject {
         //            }
         //            .store(in: &cancellables) // & pass a reference
         
+        // all coins
         $searchText
             .combineLatest(coinDataService.$allCoins) // 绑定到已有的subscriber
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main) // 类似js的debounce
@@ -73,6 +53,7 @@ class HomeViewModel: ObservableObject {
             } // 返回两个publisher.out  分别是searchText 和 allCoins
             .store(in: &cancellables) // 取消订阅
         
+        // market data
         marketDataService.$marketData
             .map { marketData -> [StatisticsModel] in
                 var stats: [StatisticsModel] = []
@@ -89,12 +70,36 @@ class HomeViewModel: ObservableObject {
                 return stats
             }
             .sink { [weak self] returnedStats in
-                self?.stats = returnedStats
+                self?.stats = returnedStats // 这里不是append的
             }
             .store(in: &cancellables)
+        
+        // portfolio coins
+        $allCoins // allCoin是一个subsciber 然后combine一个subscriber，因为存储的是coin中的holdings属性和id
+            .combineLatest(portfolioService.$savedEntities)
+            .map{
+                (coins, portfolios) -> [CoinModel] in
+                // coins是[CoinModel]，portfolios是[PortfolioEntity]
+                // 使用每一个coin取匹配portfolios， 找到后则更新coin
+                coins.compactMap { coin -> CoinModel? in
+                    guard let entity = portfolios.first(where: {$0.coinID == coin.id}) else {
+                        return nil
+                    }
+                    //print(entity)
+                    return coin.updateHoldings(amount: entity.amount) // 从entity中取回amount 绑定到coin上
+                }
+            }
+            .sink { [weak self] (returnedCoins) in
+                //print(returnedCoins)
+                self?.portfolioCoins = returnedCoins // portfolioCoins也是CoinModel类型，只是多了holding这个值
+            }
+            .store(in: &cancellables) // 一定要调用这个store否则 会出问题
     }
-    // The store(in:) method is part of the Combine framework in Swift. It is used to store the subscription of a publisher into a set of cancellables. The subscription will be automatically canceled (i.e., released) when the provided cancellable set is deallocated or explicitly canceled.
     
-    // final public func store(in set: inout Set<AnyCancellable>)
+    // 当用户存储数据的时候调用。存储完之后，就被前面的订阅更新到view中
+    func updatePortfolio(coin: CoinModel, amount: Double) {
+        portfolioService.updatePortfolio(coin: coin, amount: amount)
+    }
+   
     
 }

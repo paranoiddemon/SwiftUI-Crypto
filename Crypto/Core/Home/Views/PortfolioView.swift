@@ -59,6 +59,12 @@ struct PortfolioView: View {
                 }
             }
             )
+            .onChange(of: vm.searchText, perform: {
+                value in
+                if value == "" {
+                    removeSelectedCoin()
+                }
+            })
         }
     }
 }
@@ -70,15 +76,17 @@ struct PortfolioView: View {
 
 extension PortfolioView {
     private func saveButtonPressed() {
-        //guard let coin = selectedCoin else {return}
+        guard let coin = selectedCoin,
+              let amount = Double(quantityText)
+        else {return}
         
         // save
+        vm.updatePortfolio(coin: coin, amount: amount)
         
         withAnimation(.easeIn) {
             showCheckMark.toggle()
             // reset value
-            selectedCoin = nil
-            vm.searchText = ""
+            removeSelectedCoin()
         }
         
         //hide keyboard
@@ -93,6 +101,22 @@ extension PortfolioView {
                 }
             }
         )
+    }
+    private func removeSelectedCoin() {
+        selectedCoin = nil
+        vm.searchText = ""
+    }
+    
+    // 更新已有数据的输入框
+    private func updateSelectedCoin(coin: CoinModel){
+        selectedCoin = coin
+        
+       if let portfolioCoin = vm.portfolioCoins.first(where: { $0.id == coin.id}),
+          let amount = portfolioCoin.currentHoldings {
+           quantityText = "\(amount)"
+       } else {
+           quantityText = ""
+       }
     }
     
     private func getCurrentValue() -> Double{
@@ -133,13 +157,13 @@ extension PortfolioView {
     private var CoinLogoList:some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 10, content: {
-                ForEach(vm.allCoins) { coin in
+                ForEach(vm.searchText.isEmpty ? vm.portfolioCoins : vm.allCoins) { coin in
                     CoinLogoView(coin: coin)
                         .frame(width: 75)
                         .padding(4)
                         .onTapGesture(perform: {
                             withAnimation(.easeIn){
-                                selectedCoin = coin
+                                updateSelectedCoin(coin: coin)
                             }
                         })
                         .background(

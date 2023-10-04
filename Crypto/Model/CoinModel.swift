@@ -26,7 +26,7 @@ struct CoinModel: Identifiable, Codable { // 使用struct 会自带init
     let lastUpdated: String?
     let sparklineIn7D: SparklineIn7D?
     let priceChangePercentage24HInCurrency: Double?
-    let currentHoldings: Double?
+    let currentHoldings: Double? // 持有数量
 
     enum CodingKeys: String, CodingKey { // 同时遵守两个protocol, 绑定属性名和json属性
         case id, symbol, name, image
