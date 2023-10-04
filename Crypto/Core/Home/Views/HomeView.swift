@@ -19,11 +19,21 @@ struct HomeView: View {
     
     @State private var showPortfolio: Bool = false
     
+    @State private var showPortfolioView: Bool = false
+    
     var body: some View {
         ZStack {
-            Color.theme.background.ignoresSafeArea()
+            
+            Color.theme.background
+                .ignoresSafeArea()
+                .sheet(isPresented: $showPortfolioView, content: {
+                    PortfolioView() // new sheet是一个新的environment
+                        .environmentObject(vm)
+                })
+            
             VStack {
                 homeHeader
+                HomeStatView(showPortfolio: $showPortfolio)
                 SearchBarView(searchText: $vm.searchText) // 使用$来bind变量到子view
                 columnTitles
                 if !showPortfolio {
@@ -48,6 +58,12 @@ extension HomeView {
         HStack {
             CircleButtonView(iconName: showPortfolio ? "plus" :"info")
                 .animation(nil)
+                .onTapGesture {
+                    if showPortfolio {
+                        showPortfolioView.toggle() // 一开始是false 点击后显示为true
+                    }
+                    print("add")
+                }
                 .background(
                     CircleButtonAnimation(animate: $showPortfolio)
                     //                        .foregroundColor(.blue)

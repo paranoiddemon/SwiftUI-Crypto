@@ -30,6 +30,10 @@ class DeveloperPreivew {
 //        return instance;
 //    }
     
+    let stat1 = StatisticsModel(title:"Market Cap", value: "$12.25Bn", percentageChange: 25.24)
+    let stat2 = StatisticsModel(title:"Total Volumn", value: "$1.23Tr")
+    let stat3 = StatisticsModel(title:"Portfolio Value", value: "$50.4k", percentageChange: -15.31)
+    
     let coin = CoinModel(
            id: "bitcoin",
            symbol: "btc",
