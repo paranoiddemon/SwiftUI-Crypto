@@ -24,6 +24,8 @@ struct HomeView: View {
     @State private var selectedCoin: CoinModel? = nil
     @State private var showDetail: Bool = false
     
+    @State private var showSettings: Bool = false
+    
     var body: some View {
         ZStack {
             
@@ -53,6 +55,10 @@ struct HomeView: View {
                 
                 Spacer(minLength: 0)
             }
+            // 同一个view上不能有两个sheet
+            .sheet(isPresented: $showSettings, content: {
+                SettingsView() // new sheet是一个新的environment
+            })
         }
         .background(
             // 懒加载 从创建选中的detailView
@@ -75,8 +81,9 @@ extension HomeView {
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle() // 一开始是false 点击后显示为true
+                    } else {
+                        showSettings.toggle()
                     }
-                    print("add")
                 }
                 .background(
                     CircleButtonAnimation(animate: $showPortfolio)
