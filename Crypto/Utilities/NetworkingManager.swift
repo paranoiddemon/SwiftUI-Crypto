@@ -25,7 +25,17 @@ class NetworkingManager {
     
     static func download(url: URL) -> AnyPublisher<Data, any Error>{
         
-        return URLSession.shared.dataTaskPublisher(for: url)
+        let configuration = URLSessionConfiguration.default
+        let cache = URLCache(memoryCapacity: 10 * 1024 * 1024, diskCapacity: 50 * 1024 * 1024, diskPath: nil)
+        URLCache.shared = cache
+
+        // Assign the cache to the session configuration
+        configuration.urlCache = cache
+
+        // Create a URLSession instance with the custom configuration
+        let session = URLSession(configuration: configuration)
+        
+        return session.dataTaskPublisher(for: url)
             .subscribe(on: DispatchQueue.global(qos: .default))
             .tryMap{(output) -> Data in
                 try handleURLResponse(output: output, url: url)

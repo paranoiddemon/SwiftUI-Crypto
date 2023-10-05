@@ -30,8 +30,8 @@
             filePath = "Crypto/Core/Home/Views/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
             landmarkName = "homeHeader"
             landmarkType = "24">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "Crypto/Core/Home/Views/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "HomeView"
             landmarkType = "21">
          </BreakpointContent>
@@ -66,6 +66,22 @@
             endingLineNumber = "37"
             landmarkName = "coin"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "40E6AD69-D8DD-44BE-AD6C-8B831A11A55E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Crypto/Core/Home/ViewModels/HomeViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "subscrbeMarketData()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

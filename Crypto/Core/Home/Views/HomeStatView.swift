@@ -21,7 +21,10 @@ struct HomeStatView: View {
                 
             }
         }
-        .frame(width: UIScreen.main.bounds.width, alignment: .leading)
+        .frame(
+            width: UIScreen.main.bounds.width,
+            alignment: showPortfolio ? .trailing : .leading
+        )
     }
 }
 
@@ -29,6 +32,6 @@ struct HomeStatView: View {
     HomeStatView(showPortfolio: .constant(false))
         .environmentObject(DeveloperPreivew.instance.homeVM)
         .onAppear {
-            print(DeveloperPreivew.instance.homeVM.stats[3])
+            //print(DeveloperPreivew.instance.homeVM.stats.count)
         }
 }

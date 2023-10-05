@@ -23,7 +23,7 @@ class MarketDataService {
      URL:
      
      */
-    private func getData() {
+    func getData() {
         
         // 为啥用guard  URL是个optional 如果不为nil才会继续， 构造函数：public init?(string: String)
         guard let url = URL(string: "https://api.coingecko.com/api/v3/global")

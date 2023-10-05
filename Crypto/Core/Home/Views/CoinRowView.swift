@@ -48,6 +48,7 @@ struct CoinRowView: View {
             .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing) // 使用三分之一的宽度， 只有portrait mode，不然得使用GeometryReader
         }
         .font(.subheadline)
+        .contentShape(Rectangle()) // 让整行都可以点击
     }
 }
 

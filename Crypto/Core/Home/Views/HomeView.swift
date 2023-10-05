@@ -21,6 +21,9 @@ struct HomeView: View {
     
     @State private var showPortfolioView: Bool = false
     
+    @State private var selectedCoin: CoinModel? = nil
+    @State private var showDetail: Bool = false
+    
     var body: some View {
         ZStack {
             
@@ -39,6 +42,9 @@ struct HomeView: View {
                 if !showPortfolio {
                     allCoinList
                         .transition(.move(edge: .leading)) // 从左侧滑向右侧
+                        .refreshable {
+                            vm.reloadData()
+                        }
                 }
                 if showPortfolio {
                     portfolioCoinList
@@ -48,6 +54,14 @@ struct HomeView: View {
                 Spacer(minLength: 0)
             }
         }
+        .background(
+            // 懒加载 从创建选中的detailView
+            NavigationLink(
+                destination: DetailLoadingView(coin: $selectedCoin),
+                isActive: $showDetail,
+                label: {EmptyView()}
+            )
+        )
     }
 }
 
@@ -91,6 +105,21 @@ extension HomeView {
         List {
             ForEach(vm.allCoins) {
                 coin in
+                // NavigationLink 不是lazy load的，会提前创建所有view
+//                NavigationLink (
+//                     destination: DetailView(coin: coin),
+//                     label: {
+//                        CoinRowView(coin: coin, showHoldingColumn: false)
+//                            .listRowInsets(
+//                                .init(
+//                                    top: 10,
+//                                    leading: 10,
+//                                    bottom: 10,
+//                                    trailing: 20
+//                                )
+//                            )
+//                           
+//                })
                 CoinRowView(coin: coin, showHoldingColumn: false)
                     .listRowInsets(
                         .init(
@@ -100,6 +129,11 @@ extension HomeView {
                             trailing: 20
                         )
                     )
+                    .onTapGesture {
+                        segue(coin: coin)
+                    }
+
+
             }
             
         }
@@ -121,6 +155,11 @@ extension HomeView {
                             trailing: 20
                         )
                     )
+                    .onTapGesture {
+                        segue(coin: coin)
+                    }
+
+
             }
             
         }
@@ -128,15 +167,81 @@ extension HomeView {
             PlainListStyle()
         )
     }
+    
+    private func segue(coin: CoinModel) {
+        selectedCoin = coin
+        showDetail.toggle()
+    }
+    
     private var columnTitles: some View {
         HStack {
-            Text("Coin")
+            HStack {
+                Text("Coin")
+                Image(systemName: "chevron.down")
+                    .opacity(
+                        vm.sortOption == .rank || vm.sortOption == .rankReverserd
+                             ? 1.0
+                             : 0.0
+                    )
+                    .rotationEffect((Angle(degrees: vm.sortOption == .rank ? 0 : 180)))
+            }
+            .onTapGesture {
+                withAnimation(.default){
+                    if vm.sortOption == .rank {
+                        vm.sortOption = .rankReverserd
+                    } else {
+                        vm.sortOption = .rank
+                    }
+                }
+            }
+            
             Spacer()
             if showPortfolio {
-                Text("Holdings")
+                HStack {
+                    Text("Holdings")
+                    Image(systemName: "chevron.down")
+                        .opacity(
+                            vm.sortOption == .holdings || vm.sortOption == .holdingsReversed
+                                 ? 1.0
+                                 : 0.0
+                        )
+                        .rotationEffect((Angle(degrees: vm.sortOption == .holdings ? 0 : 180)))
+
+                }
+                .onTapGesture {
+                    withAnimation(.default){
+                        if vm.sortOption == .holdings {
+                            vm.sortOption = .holdingsReversed
+                        } else {
+                            vm.sortOption = .holdings
+                        }
+                    }
+                }
+
+                
             }
-            Text("Price")
-                .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+            HStack {
+                Text("Price")
+                Image(systemName: "chevron.down")
+                    .opacity(
+                        vm.sortOption == .price || vm.sortOption == .priceReversed
+                             ? 1.0
+                             : 0.0
+                    )
+                    .rotationEffect((Angle(degrees: vm.sortOption == .price ? 0 : 180)))
+
+            }
+            .onTapGesture {
+                withAnimation(.default){
+                    if vm.sortOption == .price {
+                        vm.sortOption = .priceReversed
+                    } else {
+                        vm.sortOption = .price
+                    }
+                }
+            }
+
+            .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
             
         }
         .font(.caption)
